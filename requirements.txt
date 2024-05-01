@@ -1,0 +1,5 @@
+python-slugify==6.1.2
+selenium==4.3.0
+anticaptchaofficial==1.0.43
+nordvpn-switcher==0.3.0
+webdriver-manager==4.0.1
