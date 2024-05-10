@@ -1,3 +1,16 @@
 {
-    "salary": 9092.45
+    "cnpj": "64310122000167",
+    "password": "senhateste123",
+    "salary": 1999.23,
+    "emission": {
+        "custom": false,
+        "day": 1,
+        "month": 5,
+        "year": 2024
+    },
+    "tomador": {
+        "create": true,
+        "cnpj": "08408953000103",
+        "phone": "63927711383"
+    }
 }
