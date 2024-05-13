@@ -1,11 +1,10 @@
 from entities.navigator import Navigator
 from datetime import datetime
 import json
-import time
 
 class Nfse(Navigator):
-    def __init__(self):
-        Navigator.__init__(self)
+    def __init__(self, debug=False):
+        Navigator.__init__(self, debug)
 
         self.data = json.load(open("nfse.json"))
         self.emission = self.data["emission"]
@@ -39,18 +38,91 @@ class Nfse(Navigator):
     
     def login(self):
         self.fields = [
-            ["Inscricao", self.data["cnpj"]],
-            ["Senha", self.data["password"]]
+            {
+                "selectors": [
+                    {
+                        "name": "Inscricao"
+                    }
+                ],
+                "action": "send_keys",
+                "send_keys": self.data["cnpj"]
+            },
+            {
+                "selectors": [
+                    {
+                        "name": "Senha"
+                    }
+                ],
+                "action": "send_keys",
+                "send_keys": self.data["password"]
+            }
         ]
         self.cursor.get(self.urls['login_url'])
-        self.fillFormByCSSSelector()
+        self.fillForm()
         self.cursor.find_element(self.by.CSS_SELECTOR, 'button[type="submit"]').click()
         self.fields = {}
     
     def create(self):
         self.fields = [
-            ["DataCompetencia", self.__getDataCompetencia()]
+            {
+                "selectors": [
+                    {
+                        "name": "DataCompetencia"
+                    }
+                ],
+                "action": "send_keys",
+                "send_keys": self.__getDataCompetencia(),
+            },
+            {
+                "selectors": [
+                    {
+                        "element": "div",
+                        "id": "pnlTomador"
+                    }
+                ],
+                "action": "click",
+                "wait": 2
+            },
+            {
+                "selectors": [
+                    {
+                        "name": "Tomador.LocalDomicilio",
+                        "value": 1
+                    }
+                ],
+                "parent": True,
+                "action": "click",
+                "wait": 1
+            },
+            {
+                "selectors": [
+                    {
+                        "id": "Tomador_Inscricao"
+                    }
+                ],
+                "action": "send_keys",
+                "send_keys": self.tomador["cnpj"]
+            },
+            {
+                "selectors": [
+                    {
+                        "element": "button",
+                        "id": "btn_Tomador_Inscricao_pesquisar"
+                    }
+                ],
+                "action": "click",
+                "wait": 1
+            },
+            {
+                "selectors": [
+                    {
+                        "element": "button",
+                        "id": "btnAvancar"
+                    }
+                ],
+                "action": "click",
+                "wait": 1
+            }
         ]
         self.cursor.get(self.urls['create_url'])
-        self.fillFormByCSSSelector()
-        time.sleep(10)
+        self.fillForm()

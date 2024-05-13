@@ -2,6 +2,6 @@ from entities.nfse import Nfse
 
 class Butler:
     def start(self):
-        Nfse().download()
+        Nfse(True).download()
 
 Butler().start()
